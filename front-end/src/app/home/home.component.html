@@ -1,0 +1,49 @@
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+
+  <div class="form-group">
+    <label for="amount">Suma</label>
+      <input
+        ngModel
+        #amount="ngModel" 
+        name="amount" id="amount" type="number" class="form-control" required [min]="1">
+      <div class="alert alert-danger" *ngIf="amount.touched && amount.invalid">
+        Įveskite sumą.  
+      </div>  
+  </div>
+
+  <!-- <div class="form-group">
+    <label for="from">Iš</label>
+      <select
+        #from="ngModel" 
+        [(ngModel)]="product.price" 
+        name="from" id="from" class="form-control">
+        <option value="EUR"></option>
+      </select>
+  </div> -->
+
+  <button (click)="addTextarea()" type="button" class="btn btn-primary">Apkeisti</button>
+
+  <div class="form-group">
+    <label for="to">Į</label>
+      <select
+        ngModel 
+        #to="ngModel"  
+        name="to" id="to" class="form-control">
+        <option *ngFor="let code of currencyCodes$ | async" [value]="code">
+          {{ code }}
+        </option>
+      </select>
+  </div>
+  <button [disabled]="!f.valid" class="btn btn-primary">Konvertuoti</button>
+</form>
+    
+
+
+<!-- <div *ngFor="let post of posts" class="border border-primary rounded">
+  <ul>
+    {{post.inputText}}
+    <li *ngFor="let res of post.results">
+      {{res}}
+    </li>
+  </ul>
+</div> -->

@@ -1,3 +1,7 @@
-ul {
+.converter-result {
     margin-top: 20px;
+}
+
+.amount-input {
+    width: 100px;
 }

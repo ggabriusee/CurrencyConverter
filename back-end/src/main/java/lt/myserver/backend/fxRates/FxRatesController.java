@@ -1,5 +1,6 @@
 package lt.myserver.backend.fxRates;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lt.lb.webservices.fxrates.CcyISO4217;
 import lt.lb.webservices.fxrates.FxRateHandling;
+import lt.myserver.backend.models.ConverterData;
 
 
 @RestController
@@ -32,12 +34,12 @@ public class FxRatesController {
 	public CcyISO4217[] getCurrencyList() {
 		return service.getCurrencyList();
 	}
-    /*
-    @PostMapping(path = "/posttexts", consumes = "application/json", produces = "application/json")
-	public List<UserData> addUserData(@RequestBody UserData data[]) {
-		return service.createUserDataList(data);
+    
+    @PostMapping(path = "/convertCurrency", consumes = "application/json", produces = "application/json")
+	public BigDecimal convertCurrency(@RequestBody ConverterData converterData) {
+		return service.convertCurrency(converterData);
 	}
-
+/*
 	@PostMapping(path = "/postfiles", consumes = "multipart/form-data", produces = "application/json")
 	public @ResponseBody List<UserData> addUserDataFromFiles(@RequestParam("file") MultipartFile files[]) {
 		return service.createUserDataFromFiles(files);

@@ -1,6 +1,7 @@
 package lt.myserver.backend.fxRates;
 
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -11,7 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import lt.lb.webservices.fxrates.CcyISO4217;
+import lt.lb.webservices.fxrates.FxRateHandling;
 import lt.lb.webservices.fxrates.FxRatesHandling;
+import lt.myserver.backend.models.ConverterData;
 
 
 @Service("fxRatesServiceImpl")
@@ -31,6 +34,17 @@ public class FxRatesServiceImpl implements FxRatesService{
 
     public CcyISO4217[] getCurrencyList(){
         return CcyISO4217.values();
+    }
+
+    public BigDecimal convertCurrency(ConverterData cd){
+        List<FxRateHandling> rates = getCurrentFxRates().getFxRate();
+        for (FxRateHandling rate: rates){
+            String currentCurrencyCode = rate.getCcyAmt().get(1).getCcy().value();
+            if(cd.getTo().equalsIgnoreCase(currentCurrencyCode)){
+                return rate.getCcyAmt().get(1).getAmt().multiply(cd.getAmount());
+            }
+        }
+        return BigDecimal.ZERO;
     }
 
     /*

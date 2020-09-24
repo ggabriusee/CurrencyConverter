@@ -1,44 +1,61 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="form-inline">
 
   <div class="form-group">
-    <label for="amount">Suma</label>
+    <label for="amount" class="my-1 mr-2">Suma</label>
       <input
         ngModel
         #amount="ngModel" 
-        name="amount" id="amount" type="number" class="form-control" required [min]="1">
-      <div class="alert alert-danger" *ngIf="amount.touched && amount.invalid">
-        Įveskite sumą.  
-      </div>  
+        name="amount" 
+        id="amount" 
+        type="number" 
+        class="form-control my-1 mr-sm-2 amount-input" 
+        placeholder="1"
+        required [min]="1">
   </div>
 
-  <!-- <div class="form-group">
-    <label for="from">Iš</label>
+  <div class="form-group">
+    <label for="from" class="my-1 mr-2">Iš</label>
       <select
-        #from="ngModel" 
-        [(ngModel)]="product.price" 
-        name="from" id="from" class="form-control">
-        <option value="EUR"></option>
+        #from="ngModel"
+        ngModel="EUR"
+        name="from" 
+        id="from" 
+        class="form-control my-1 mr-sm-2">
+        <option value="EUR" selected>EUR</option>
       </select>
-  </div> -->
+  </div>
 
-  <button (click)="addTextarea()" type="button" class="btn btn-primary">Apkeisti</button>
+  <button (click)="changeFromTo(from, to)" type="button" class="btn btn-primary my-1 mr-sm-2">Apkeisti</button>
 
   <div class="form-group">
-    <label for="to">Į</label>
+    <label for="to" class="my-1 mr-2">Į</label>
       <select
-        ngModel 
-        #to="ngModel"  
-        name="to" id="to" class="form-control">
+        #to="ngModel"
+        [(ngModel)]="selectedCurrencyCode"
+        name="to" 
+        id="to" 
+        class="form-control my-1 mr-sm-2">
         <option *ngFor="let code of currencyCodes$ | async" [value]="code">
           {{ code }}
         </option>
       </select>
   </div>
-  <button [disabled]="!f.valid" class="btn btn-primary">Konvertuoti</button>
+  <button [disabled]="!f.valid" class="btn btn-primary my-1">Konvertuoti</button>
 </form>
-    
 
+<div class="alert alert-danger" *ngIf="amount.touched && amount.invalid">
+  Įveskite sumą.  
+</div>  
 
+<div *ngIf="currentCornverterModel && convertedAmount" class="converter-result">
+<p>
+  {{currentCornverterModel.amount + " " + currentCornverterModel.from}} = {{convertedAmount + " " + currentCornverterModel.to}}
+</p>
+</div>
+<div *ngIf="errorMsg" class="converter-result">
+  <p>
+    {{errorMsg}}
+  </p>
 <!-- <div *ngFor="let post of posts" class="border border-primary rounded">
   <ul>
     {{post.inputText}}

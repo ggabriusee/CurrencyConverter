@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { CurrencyConverterModel } from './models/CurrencyConverterModel';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -22,11 +23,12 @@ export class CurrencyService {
   getCurrencyList(){
     return this.http.get<string[]>(this.serviceUrl + 'getCurrencyList');
   }
-/*
-  sendInput(input: ){
-    return this.http.post<>(this.serviceUrl + 'posttexts', input, httpOptions);
-  }
 
+  convertCurrency(postBody: CurrencyConverterModel){
+    return this.http.post<number>(this.serviceUrl + 'convertCurrency', postBody, httpOptions);
+  }
+  
+/*
   sendFile(data: FormData) {
     return this.http.post<>(this.serviceUrl + 'postfiles', data);
   }*/ 

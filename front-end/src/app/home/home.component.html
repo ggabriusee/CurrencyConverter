@@ -1,16 +1,19 @@
+<h2>Currency converter</h2>
+
 <form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="form-inline">
 
   <div class="form-group">
     <label for="amount" class="my-1 mr-2">Suma</label>
       <input
-        ngModel
         #amount="ngModel" 
-        name="amount" 
+        name="amount"
+        [(ngModel)]="userAmount" 
         id="amount" 
         type="number" 
         class="form-control my-1 mr-sm-2 amount-input" 
         placeholder="1"
-        required [min]="1">
+        required 
+        min="1">
   </div>
 
   <div class="form-group">
@@ -24,9 +27,9 @@
         <option value="EUR" selected>EUR</option>
       </select>
   </div>
-
+<!-- 
   <button (click)="changeFromTo(from, to)" type="button" class="btn btn-primary my-1 mr-sm-2">Apkeisti</button>
-
+ -->
   <div class="form-group">
     <label for="to" class="my-1 mr-2">Į</label>
       <select
@@ -44,23 +47,16 @@
 </form>
 
 <div class="alert alert-danger" *ngIf="amount.touched && amount.invalid">
-  Įveskite sumą.  
-</div>  
+  Įveskite sumą.
+</div>
 
-<div *ngIf="currentCornverterModel && convertedAmount" class="converter-result">
-<p>
-  {{currentCornverterModel.amount + " " + currentCornverterModel.from}} = {{convertedAmount + " " + currentCornverterModel.to}}
-</p>
+<div *ngIf="currentConverterModel && convertedAmount" class="converter-result">
+  <p>
+    {{currentConverterModel.amount + " " + currentConverterModel.from}} = {{convertedAmount + " " + currentConverterModel.to}}
+  </p>
 </div>
 <div *ngIf="errorMsg" class="converter-result">
   <p>
     {{errorMsg}}
   </p>
-<!-- <div *ngFor="let post of posts" class="border border-primary rounded">
-  <ul>
-    {{post.inputText}}
-    <li *ngFor="let res of post.results">
-      {{res}}
-    </li>
-  </ul>
-</div> -->
+</div>

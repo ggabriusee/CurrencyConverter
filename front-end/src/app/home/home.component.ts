@@ -12,8 +12,9 @@ export class HomeComponent implements OnInit {
 
   currencyCodes$: Observable<string[]>;
   selectedCurrencyCode = "USD";
+  userAmount: number = 1;
   convertedAmount: number;
-  currentCornverterModel: CurrencyConverterModel;
+  currentConverterModel: CurrencyConverterModel;
   errorMsg:string;
 
   constructor(private currencyService: CurrencyService) {
@@ -24,12 +25,14 @@ export class HomeComponent implements OnInit {
   }
 
   onSubmit(formData: CurrencyConverterModel){
-    this.currentCornverterModel = formData;
+    this.checkFormData(formData);
+    this.currentConverterModel = formData;
     this.currencyService.convertCurrency(formData)
     .subscribe( (returnedAmount: number) => {
-      if (returnedAmount == 0)
+      if (returnedAmount === 0){
         this.errorMsg="Šiuo metu nepavyksta gauti pasirinktų valiutų kursų.";
-      else{
+        this.convertedAmount = null;
+      }else{
         this.convertedAmount = returnedAmount;
         this.errorMsg = null;
       }
@@ -37,12 +40,11 @@ export class HomeComponent implements OnInit {
     });
   }
 
-  changeFromTo(from, to){
-    console.log("???", from);
-    console.log("!!!", to);
-    let t = from.control.value;
-    from.control.value = to.control.value;
-    to.control.value = t;
+  checkFormData(formData: CurrencyConverterModel){
+    if(formData.amount === 0)
+      formData.amount = this.userAmount = 1;
+    else if (formData.amount < 0)
+      formData.amount = this.userAmount = Math.abs(formData.amount);
   }
 
 }

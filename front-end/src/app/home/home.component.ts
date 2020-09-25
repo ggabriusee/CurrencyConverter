@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CurrencyService } from '../currency.service';
+import { ConverterReturnModel } from '../models/ConverterReturnModel';
 import { CurrencyConverterModel } from '../models/CurrencyConverterModel';
 
 @Component({
@@ -28,15 +29,15 @@ export class HomeComponent implements OnInit {
     this.checkFormData(formData);
     this.currentConverterModel = formData;
     this.currencyService.convertCurrency(formData)
-    .subscribe( (returnedAmount: number) => {
-      if (returnedAmount === 0){
-        this.errorMsg="Šiuo metu nepavyksta gauti pasirinktų valiutų kursų.";
+    .subscribe( (returnedData: ConverterReturnModel) => {
+      if (returnedData.isError){
+        this.errorMsg=returnedData.errMsg;
         this.convertedAmount = null;
       }else{
-        this.convertedAmount = returnedAmount;
+        this.convertedAmount = returnedData.convertedAmount;
         this.errorMsg = null;
       }
-      console.log("GRAZINO BACKEND: ", returnedAmount);
+      console.log("GRAZINO BACKEND: ", returnedData);
     });
   }
 

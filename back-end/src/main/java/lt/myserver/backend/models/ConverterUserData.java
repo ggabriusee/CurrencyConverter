@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import lombok.Data;
 
 @Data
-public class ConverterData {
+public class ConverterUserData {
     
     private BigDecimal amount;
     private String from;

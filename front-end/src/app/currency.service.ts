@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { CurrencyConverterModel } from './models/CurrencyConverterModel';
+import { ConverterReturnModel } from './models/ConverterReturnModel';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -25,7 +26,7 @@ export class CurrencyService {
   }
 
   convertCurrency(postBody: CurrencyConverterModel){
-    return this.http.post<number>(this.serviceUrl + 'convertCurrency', postBody, httpOptions);
+    return this.http.post<ConverterReturnModel>(this.serviceUrl + 'convertCurrency', postBody, httpOptions);
   }
   
 /*

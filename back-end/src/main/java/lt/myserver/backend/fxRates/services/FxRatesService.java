@@ -1,4 +1,4 @@
-package lt.myserver.backend.fxRates;
+package lt.myserver.backend.fxRates.services;
 
 import java.util.List;
 

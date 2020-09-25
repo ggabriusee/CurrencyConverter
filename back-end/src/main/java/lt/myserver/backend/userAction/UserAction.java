@@ -1,4 +1,4 @@
-package lt.myserver.backend.models;
+package lt.myserver.backend.userAction;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -12,25 +12,25 @@ import lombok.Data;
 
 @Entity
 @Data
-public class UserActions {
+public class UserAction {
 
     @Id
 	@GeneratedValue
     private Long id;
     
-    //@Column
+    @Column(nullable = false)
     private BigDecimal amount;
 
-    //@Column
+    @Column(nullable = false)
     private String convertFrom;
     
-    //@Column
+    @Column(nullable = false)
     private String convertTo;
 
-    //@Column
+    @Column
     private BigDecimal result;
 
-    //@Column
+    @Column(nullable = false)
     private Timestamp actionDate;
     
 }

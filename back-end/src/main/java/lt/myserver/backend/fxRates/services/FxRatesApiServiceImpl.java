@@ -1,4 +1,4 @@
-package lt.myserver.backend.fxRates;
+package lt.myserver.backend.fxRates.services;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -16,57 +16,45 @@ import org.springframework.web.reactive.function.client.WebClient;
 import lt.lb.webservices.fxrates.CcyISO4217;
 import lt.lb.webservices.fxrates.FxRateHandling;
 import lt.lb.webservices.fxrates.FxRatesHandling;
-import lt.myserver.backend.models.ConverterData;
-import lt.myserver.backend.models.UserActions;
-import lt.myserver.backend.repositories.UserActionsRepository;
+import lt.myserver.backend.models.ConverterReturnData;
+import lt.myserver.backend.models.ConverterUserData;
+import lt.myserver.backend.fxRates.entities.EuroExcRate;
+import lt.myserver.backend.fxRates.repositories.EuroExcRateRepository;
+import lt.myserver.backend.userAction.UserActionServiceImpl;
 
 
 @Service("fxRatesServiceImpl")
-public class FxRatesServiceImpl implements FxRatesService{
+public class FxRatesApiServiceImpl implements FxRatesService{
     
     @Autowired
     private WebClient fxRatesApiClient;
 
-    @Autowired
-    private UserActionsRepository userActionsRepository;
+    private FxRatesHandling fxRatesHandling;
+
     
-    public FxRatesHandling getCurrentFxRates(){
-        return fxRatesApiClient
+    
+    public int checkgetCurrentFxRates(){
+        fxRatesHandling = fxRatesApiClient
                 .get()
-                .uri("/getCurrentFxRates?tp=LT")
+                .uri("/getCurrentFxRates?tp=EU")
                 .retrieve()
                 .bodyToMono(FxRatesHandling.class)
                 .block();
+        return fxRatesHandling != null ? fxRatesHandling.getFxRate().size() : 0; 
     }
 
-    public CcyISO4217[] getCurrencyList(){
-        return CcyISO4217.values();
+    public FxRatesHandling getCurrentFxRates(){
+        return fxRatesApiClient
+                .get()
+                .uri("/getCurrentFxRates?tp=EU")
+                .retrieve()
+                .bodyToMono(FxRatesHandling.class)
+                .block(); 
     }
 
-    public BigDecimal convertCurrency(ConverterData cd){
-        BigDecimal convertedAmount = BigDecimal.ZERO;
-        List<FxRateHandling> rates = getCurrentFxRates().getFxRate();
-        for (FxRateHandling rate: rates){
-            String currentCurrencyCode = rate.getCcyAmt().get(1).getCcy().value();
-            if(cd.getTo().equalsIgnoreCase(currentCurrencyCode)){
-                convertedAmount = rate.getCcyAmt().get(1).getAmt().multiply(cd.getAmount());
-            }
-        }
-        UserActions ua = createUserAction(cd, convertedAmount);       
-        userActionsRepository.save(ua);
-        return convertedAmount;
-    }
+    
 
-
-    private UserActions createUserAction(ConverterData cd, BigDecimal convertedAmount){
-        UserActions ua = new UserActions();
-        ua.setAmount(cd.getAmount());
-        ua.setConvertFrom(cd.getFrom());
-        ua.setConvertTo(cd.getTo());
-        ua.setResult(convertedAmount);
-        ua.setActionDate(new Timestamp(System.currentTimeMillis()));
-        return ua;
-    }
+    
     /*
     @Autowired
 	private UserDataRepository repository;

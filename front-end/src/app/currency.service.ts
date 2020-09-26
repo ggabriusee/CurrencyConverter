@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { CurrencyConverterModel } from './models/CurrencyConverterModel';
-import { ConverterReturnModel } from './models/ConverterReturnModel';
+import { ConverterResponseModel } from './models/ConverterResponseModel';
+import { ConverterRequestModel } from './models/ConverterRequestModel';
 
 const httpOptions = {
   headers: new HttpHeaders({
@@ -29,8 +29,8 @@ export class CurrencyService {
     return this.http.get<string[]>(this.serviceUrl + 'getFxRateTypeList');
   }
   
-  convertCurrency(postBody: CurrencyConverterModel){
-    return this.http.post<ConverterReturnModel>(this.serviceUrl + 'convertCurrency', postBody, httpOptions);
+  convertCurrency(postBody: ConverterRequestModel){
+    return this.http.post<ConverterResponseModel>(this.serviceUrl + 'convertCurrency', postBody, httpOptions);
   }
   
 }

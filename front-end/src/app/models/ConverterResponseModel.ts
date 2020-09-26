@@ -1,4 +1,4 @@
-export interface ConverterReturnModel{
+export interface ConverterResponseModel{
     convertedAmount: number;
     errMsg: string;
     isError: Boolean;

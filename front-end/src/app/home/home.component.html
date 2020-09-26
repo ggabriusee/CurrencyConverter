@@ -1,9 +1,10 @@
 <h2>Currency converter</h2>
 
-<form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="form-inline">
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value)">
 
-  <div class="form-group">
-    <label for="type">Kurso tipas</label>
+  <div class="form-row">
+    <div class="form-group col-md-1">
+      <label for="type">Kurso tipas</label>
       <select
         #type="ngModel"
         [(ngModel)]="selectedExcRateType"
@@ -14,10 +15,10 @@
           {{ excType }}
         </option>
       </select>
-  </div>
+    </div>
 
-  <div class="form-group">
-    <label for="date">Data</label>
+    <div class="form-group col-md-2">
+      <label for="date">Data</label>
       <input
         #date="ngModel" 
         name="date"
@@ -25,52 +26,57 @@
         id="date" 
         type="date" 
         class="form-control">
+    </div>
   </div>
 
-  <div class="form-group">
-    <label for="amount" class="my-1 mr-2">Suma</label>
+  <div class="form-row align-items-center">
+    <div class="form-group col-md-1">
+      <label for="amount">Suma</label>
       <input
         #amount="ngModel" 
         name="amount"
         [(ngModel)]="userAmount" 
         id="amount" 
         type="text" 
-        class="form-control my-1 mr-sm-2 amount-input" 
+        class="form-control amount-input" 
         placeholder="1"
         required
         pattern="^-?\d+\.?\d*$"
         maxlength="15">
-  </div>
+    </div>
 
-  <div class="form-group">
-    <label for="from" class="my-1 mr-2">Iš</label>
+    <div class="form-group col-md-1">
+      <label for="from">Iš</label>
       <select
         #from="ngModel"
         ngModel="EUR"
         name="from" 
         id="from" 
-        class="form-control my-1 mr-sm-2">
+        class="form-control">
         <option value="EUR" selected>EUR</option>
       </select>
-  </div>
+    </div>
 
-  <div class="form-group">
-    <label for="to" class="my-1 mr-2">Į</label>
+    <div class="form-group col-md-1">
+      <label for="to">Į</label>
       <select
         #to="ngModel"
         [(ngModel)]="selectedCurrencyCode"
         name="to" 
         id="to" 
-        class="form-control my-1 mr-sm-2">
+        class="form-control">
         <option *ngFor="let code of currencyCodes$ | async" [value]="code">
           {{ code }}
         </option>
       </select>
+    </div>
+    <div class="form-group col-md-2 align-self-end">
+      <button [disabled]="!f.valid" class="btn btn-primary">Konvertuoti</button>
+    </div>
   </div>
-  <button [disabled]="!f.valid" class="btn btn-primary my-1">Konvertuoti</button>
 </form>
 
-<div class="alert alert-danger" *ngIf="amount.touched && amount.invalid">
+<div class="col-md-3 alert alert-danger" *ngIf="amount.touched && amount.invalid">
   Įveskite sumą.
 </div>
 

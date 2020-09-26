@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { CurrencyService } from '../currency.service';
-import { ConverterReturnModel } from '../models/ConverterReturnModel';
-import { CurrencyConverterModel } from '../models/CurrencyConverterModel';
+import { ConverterResponseModel } from '../models/ConverterResponseModel';
+import { ConverterFormModel } from '../models/ConverterFormModel';
+import { ConverterRequestModel } from '../models/ConverterRequestModel';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,7 @@ export class HomeComponent implements OnInit{
   selectedExcRateType = "EU";
   userAmount: number = 1;
   convertedAmount: number;
-  converterView: CurrencyConverterModel;
+  converterView: ConverterRequestModel;
   errorMsg: string;
   todaysDate: string;
 
@@ -29,20 +30,20 @@ export class HomeComponent implements OnInit{
     this.todaysDate = new Date().toISOString().substring(0, 10);
   }
 
-  onSubmit(formData: CurrencyConverterModel){
-    this.clearView();
-    this.checkFormData(formData);
 
-    this.currencyService.convertCurrency(formData)
-    .subscribe( (returnedData: ConverterReturnModel) => {
-      
-      this.converterView = formData;
+  onSubmit(formData: ConverterFormModel){
+    this.clearView();
+    let formView = new ConverterRequestModel(formData);
+    this.checkFormView(formView);
+
+    this.currencyService.convertCurrency(formView)
+    .subscribe( (returnedData: ConverterResponseModel) => {
+      this.converterView = formView;
       if (returnedData.isError){
         this.errorMsg=returnedData.errMsg;
       }else{
         this.convertedAmount = returnedData.convertedAmount;
       }
-      console.log(this.converterView, this.convertedAmount);
     });
   }
 
@@ -52,8 +53,7 @@ export class HomeComponent implements OnInit{
     this.converterView = null;
   }
 
-  checkFormData(formData: CurrencyConverterModel){
-    formData.amount = +formData.amount;
+  checkFormView(formData: ConverterRequestModel){
     if(formData.amount === 0)
       formData.amount = this.userAmount = 1;
     else if (formData.amount < 0)

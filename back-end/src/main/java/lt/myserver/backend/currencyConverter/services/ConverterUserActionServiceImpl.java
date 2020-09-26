@@ -29,6 +29,8 @@ public class ConverterUserActionServiceImpl implements ConverterUserActionServic
         ua.setConvertTo(cd.getTo());
         ua.setResult(convertedAmount);
         ua.setActionDate(new Timestamp(System.currentTimeMillis()));
+        ua.setRateType(cd.getType());
+        ua.setConverterDate(cd.getDate());
         return ua;
     }
     

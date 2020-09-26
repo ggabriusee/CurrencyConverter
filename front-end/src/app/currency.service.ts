@@ -25,12 +25,12 @@ export class CurrencyService {
     return this.http.get<string[]>(this.serviceUrl + 'getCurrencyList');
   }
 
+  getExcRateTypeList(){
+    return this.http.get<string[]>(this.serviceUrl + 'getFxRateTypeList');
+  }
+  
   convertCurrency(postBody: CurrencyConverterModel){
     return this.http.post<ConverterReturnModel>(this.serviceUrl + 'convertCurrency', postBody, httpOptions);
   }
   
-/*
-  sendFile(data: FormData) {
-    return this.http.post<>(this.serviceUrl + 'postfiles', data);
-  }*/ 
 }

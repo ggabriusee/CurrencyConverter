@@ -1,6 +1,7 @@
 package lt.myserver.backend.currencyConverter.entities;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import javax.persistence.Column;
@@ -26,6 +27,12 @@ public class ConverterUserAction {
     
     @Column(nullable = false)
     private String convertTo;
+
+    @Column(nullable = false)
+    private Date converterDate;
+
+    @Column(nullable = false)
+    private String rateType;
 
     @Column
     private BigDecimal result;

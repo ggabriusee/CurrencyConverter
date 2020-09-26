@@ -3,6 +3,31 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f.value)" class="form-inline">
 
   <div class="form-group">
+    <label for="type">Kurso tipas</label>
+      <select
+        #type="ngModel"
+        [(ngModel)]="selectedExcRateType"
+        name="type" 
+        id="type" 
+        class="form-control">
+        <option *ngFor="let excType of excRateTypes$ | async" [value]="excType">
+          {{ excType }}
+        </option>
+      </select>
+  </div>
+
+  <div class="form-group">
+    <label for="date">Data</label>
+      <input
+        #date="ngModel" 
+        name="date"
+        [(ngModel)]="todaysDate"
+        id="date" 
+        type="date" 
+        class="form-control">
+  </div>
+
+  <div class="form-group">
     <label for="amount" class="my-1 mr-2">Suma</label>
       <input
         #amount="ngModel" 

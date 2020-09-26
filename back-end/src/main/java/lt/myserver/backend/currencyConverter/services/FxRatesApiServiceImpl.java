@@ -1,4 +1,4 @@
-package lt.myserver.backend.fxRates.services;
+package lt.myserver.backend.currencyConverter.services;
 
 import org.springframework.stereotype.Service;
 

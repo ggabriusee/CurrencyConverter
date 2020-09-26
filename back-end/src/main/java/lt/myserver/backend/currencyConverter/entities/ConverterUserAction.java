@@ -1,4 +1,4 @@
-package lt.myserver.backend.userAction;
+package lt.myserver.backend.currencyConverter.entities;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -12,7 +12,7 @@ import lombok.Data;
 
 @Entity
 @Data
-public class UserAction {
+public class ConverterUserAction {
 
     @Id
 	@GeneratedValue

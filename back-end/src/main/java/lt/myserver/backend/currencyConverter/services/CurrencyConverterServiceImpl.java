@@ -1,11 +1,8 @@
-package lt.myserver.backend.fxRates.services;
+package lt.myserver.backend.currencyConverter.services;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -18,11 +15,11 @@ import lt.lb.webservices.fxrates.CcyISO4217;
 import lt.lb.webservices.fxrates.FxRateTypeHandling;
 import lt.lb.webservices.fxrates.FxRateHandling;
 import lt.lb.webservices.fxrates.FxRatesHandling;
-import lt.myserver.backend.fxRates.entities.EuroExcRate;
-import lt.myserver.backend.fxRates.repositories.EuroExcRateRepository;
+import lt.myserver.backend.currencyConverter.entities.EuroExcRate;
+import lt.myserver.backend.currencyConverter.repositories.EuroExcRateRepository;
 import lt.myserver.backend.models.ConverterReturnData;
 import lt.myserver.backend.models.ConverterUserData;
-import lt.myserver.backend.userAction.UserActionServiceImpl;
+
 
 @CommonsLog
 @Service("currencyConverterService")
@@ -32,7 +29,7 @@ public class CurrencyConverterServiceImpl implements CurrencyConverterService{
     private FxRatesApiServiceImpl fxRatesApiService;
     
     @Autowired
-    private UserActionServiceImpl userActionService;
+    private ConverterUserActionServiceImpl userActionService;
     
     @Autowired
     private EuroExcRateRepository euroExcRateRepository;

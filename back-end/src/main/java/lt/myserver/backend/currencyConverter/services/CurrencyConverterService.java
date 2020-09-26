@@ -1,4 +1,4 @@
-package lt.myserver.backend.fxRates.services;
+package lt.myserver.backend.currencyConverter.services;
 
 import java.math.BigDecimal;
 import java.sql.Date;

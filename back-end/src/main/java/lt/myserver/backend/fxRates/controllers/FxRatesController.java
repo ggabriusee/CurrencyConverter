@@ -15,7 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import lt.lb.webservices.fxrates.CcyISO4217;
 import lt.lb.webservices.fxrates.FxRateHandling;
-import lt.myserver.backend.fxRates.services.CurrencyConverterService;
+import lt.lb.webservices.fxrates.FxRateTypeHandling;
+import lt.myserver.backend.fxRates.services.CurrencyConverterServiceImpl;
 import lt.myserver.backend.fxRates.services.FxRatesApiServiceImpl;
 import lt.myserver.backend.models.ConverterReturnData;
 import lt.myserver.backend.models.ConverterUserData;
@@ -26,25 +27,21 @@ import lt.myserver.backend.models.ConverterUserData;
 public class FxRatesController {
 
 	@Autowired
-	private CurrencyConverterService converterService;
-	/*
-	@GetMapping(path = "/getCurrentFxRates", produces = "application/json")
-	public List<FxRateHandling> getCurrentFxRates() {
-		return service.getCurrentFxRates().getFxRate();
-	}*/
+	private CurrencyConverterServiceImpl converterService;
 
     @GetMapping(path = "/getCurrencyList", produces = "application/json")
 	public CcyISO4217[] getCurrencyList() {
 		return converterService.getCurrencyList();
 	}
+
+	@GetMapping(path = "/getFxRateTypeList", produces = "application/json")
+	public FxRateTypeHandling[] getFxRateTypeList() {
+		return converterService.getExcRateTypes();
+	}
     
     @PostMapping(path = "/convertCurrency", consumes = "application/json", produces = "application/json")
 	public ConverterReturnData convertCurrency(@RequestBody ConverterUserData converterUserData) {
-		return converterService.getConverterReturnData(converterUserData);
+		return converterService.convert(converterUserData);
 	}
-/*
-	@PostMapping(path = "/postfiles", consumes = "multipart/form-data", produces = "application/json")
-	public @ResponseBody List<UserData> addUserDataFromFiles(@RequestParam("file") MultipartFile files[]) {
-		return service.createUserDataFromFiles(files);
-	}*/
+
 }

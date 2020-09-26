@@ -1,7 +1,7 @@
 package lt.myserver.backend.fxRates.entities;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -21,13 +21,16 @@ public class EuroExcRate {
     @Column(nullable = false)
     private String currency;
 
-    @Column(nullable = false)
+    @Column(nullable = false, precision = 20, scale = 7)
     private BigDecimal excRate;
 
     @Column(nullable = false)
     private Date excRateDate;
 
     @Column(nullable = false)
-    private String rateType;
+    private String type;
+
+    @Column(nullable = false)
+    private Date dateAdded;
 
 }

@@ -9,11 +9,12 @@
         name="amount"
         [(ngModel)]="userAmount" 
         id="amount" 
-        type="number" 
+        type="text" 
         class="form-control my-1 mr-sm-2 amount-input" 
         placeholder="1"
-        required 
-        min="1">
+        required
+        pattern="^-?\d+\.?\d*$"
+        maxlength="15">
   </div>
 
   <div class="form-group">
@@ -27,9 +28,7 @@
         <option value="EUR" selected>EUR</option>
       </select>
   </div>
-<!-- 
-  <button (click)="changeFromTo(from, to)" type="button" class="btn btn-primary my-1 mr-sm-2">Apkeisti</button>
- -->
+
   <div class="form-group">
     <label for="to" class="my-1 mr-2">Į</label>
       <select
@@ -50,9 +49,9 @@
   Įveskite sumą.
 </div>
 
-<div *ngIf="currentConverterModel && convertedAmount" class="converter-result">
+<div *ngIf="converterView" class="converter-result">
   <p>
-    {{currentConverterModel.amount + " " + currentConverterModel.from}} = {{convertedAmount + " " + currentConverterModel.to}}
+    {{converterView.amount + " " + converterView.from}} = {{convertedAmount + " " + converterView.to}}
   </p>
 </div>
 <div *ngIf="errorMsg" class="converter-result">

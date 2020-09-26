@@ -19,8 +19,8 @@ public class ConverterReturnData {
     }
 
     public void checkForError(){
-        if (convertedAmount.equals(BigDecimal.ZERO)){
-            createError("Šiuo metu nepavyksta gauti pasirinktų valiutų kursų.");
+        if (!isError && convertedAmount.equals(BigDecimal.ZERO)){
+            createError("Šiuo metu nėra pasirinktų valiutų kursų.");
         }
     }
 }

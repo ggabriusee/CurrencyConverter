@@ -9,39 +9,44 @@ import { CurrencyConverterModel } from '../models/CurrencyConverterModel';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent{
 
   currencyCodes$: Observable<string[]>;
   selectedCurrencyCode = "USD";
   userAmount: number = 1;
   convertedAmount: number;
-  currentConverterModel: CurrencyConverterModel;
+  converterView: CurrencyConverterModel;
   errorMsg:string;
 
   constructor(private currencyService: CurrencyService) {
     this.currencyCodes$ = currencyService.getCurrencyList();
   }
 
-  ngOnInit() {
-  }
-
   onSubmit(formData: CurrencyConverterModel){
+    this.clearView();
     this.checkFormData(formData);
-    this.currentConverterModel = formData;
+
     this.currencyService.convertCurrency(formData)
     .subscribe( (returnedData: ConverterReturnModel) => {
+      
+      this.converterView = formData;
       if (returnedData.isError){
         this.errorMsg=returnedData.errMsg;
-        this.convertedAmount = null;
       }else{
         this.convertedAmount = returnedData.convertedAmount;
-        this.errorMsg = null;
       }
-      console.log("GRAZINO BACKEND: ", returnedData);
+      console.log(this.converterView, this.convertedAmount);
     });
   }
 
+  clearView(){
+    this.convertedAmount = null;
+    this.errorMsg = null;
+    this.converterView = null;
+  }
+
   checkFormData(formData: CurrencyConverterModel){
+    formData.amount = +formData.amount;
     if(formData.amount === 0)
       formData.amount = this.userAmount = 1;
     else if (formData.amount < 0)

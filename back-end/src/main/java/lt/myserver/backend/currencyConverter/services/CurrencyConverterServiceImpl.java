@@ -15,8 +15,8 @@ import lt.lb.webservices.fxrates.CcyISO4217;
 import lt.lb.webservices.fxrates.FxRateTypeHandling;
 import lt.lb.webservices.fxrates.FxRateHandling;
 import lt.lb.webservices.fxrates.FxRatesHandling;
-import lt.myserver.backend.currencyConverter.entities.EuroExcRate;
-import lt.myserver.backend.currencyConverter.repositories.EuroExcRateRepository;
+import lt.myserver.backend.currencyConverter.entities.ExcRate;
+import lt.myserver.backend.currencyConverter.repositories.ExcRateRepository;
 import lt.myserver.backend.models.ConverterReturnData;
 import lt.myserver.backend.models.ConverterUserData;
 
@@ -32,7 +32,7 @@ public class CurrencyConverterServiceImpl implements CurrencyConverterService{
     private ConverterUserActionServiceImpl userActionService;
     
     @Autowired
-    private EuroExcRateRepository euroExcRateRepository;
+    private ExcRateRepository excRateRepository;
 
     private final String API_ERROR_MSG = "Nepavyko prisijungti prie banko.";
 
@@ -46,8 +46,9 @@ public class CurrencyConverterServiceImpl implements CurrencyConverterService{
 
     public ConverterReturnData convert(ConverterUserData cud){
         ConverterReturnData ret = new ConverterReturnData();
+
         Date today = new Date(System.currentTimeMillis());
-        if(today.equals(cud.getDate())){
+        if(today.toString().equals(cud.getDate().toString())){
             convertToCurrent(cud, ret, today);
         }else{
             convertByDate(cud, ret);
@@ -59,24 +60,24 @@ public class CurrencyConverterServiceImpl implements CurrencyConverterService{
     }
 
     public void convertByDate(ConverterUserData cud, ConverterReturnData ret){
-        EuroExcRate eer = euroExcRateRepository.findOneByCurrencyAndExcRateDate(cud.getTo(), cud.getDate());
-
-        if(eer == null){
+        ExcRate er = excRateRepository.searchByExcRateDate(cud.getFrom(), cud.getTo(), cud.getType(), cud.getDate());
+        
+        if(er == null){
             FxRatesHandling fxRatesHandling = fxRatesApiService.getFxRates(cud.getType(), cud.getDate());
             requestRatesFromBank(fxRatesHandling, cud, ret);
         }else
-            convertCurrency(ret, cud.getAmount(), eer.getExcRate());
+            convertCurrency(ret, cud.getAmount(), er.getExcRate());
     }
 
     public void convertToCurrent(ConverterUserData cud, ConverterReturnData ret, Date today){
-        List<EuroExcRate> eerList = euroExcRateRepository.findByCurrencyAndDateAdded(cud.getTo(), today);
-
-        if(eerList.isEmpty()){
+        List<ExcRate> erList = excRateRepository.searchByDateAdded(cud.getFrom(), cud.getTo(), cud.getType(), today);
+        
+        if(erList.isEmpty()){
             FxRatesHandling fxRatesHandling = fxRatesApiService.getCurrentFxRates(cud.getType());
             requestRatesFromBank(fxRatesHandling, cud, ret);
         }else{
-            EuroExcRate eer = findNewestExcRate(eerList);
-            convertCurrency(ret, cud.getAmount(), eer.getExcRate());
+            ExcRate er = findNewestExcRate(erList);
+            convertCurrency(ret, cud.getAmount(), er.getExcRate());
         }
     }
 
@@ -98,49 +99,50 @@ public class CurrencyConverterServiceImpl implements CurrencyConverterService{
         crd.checkForError();
     }
 
-    public EuroExcRate findNewestExcRate(List<EuroExcRate> eerList){
-        Comparator<EuroExcRate> cmp = new Comparator<EuroExcRate>() {
+    public ExcRate findNewestExcRate(List<ExcRate> erList){
+        Comparator<ExcRate> cmp = new Comparator<ExcRate>() {
             @Override
-            public int compare(EuroExcRate eer1, EuroExcRate eer2) {
-                return eer1.getExcRateDate().compareTo(eer2.getExcRateDate());
+            public int compare(ExcRate er1, ExcRate er2) {
+                return er1.getExcRateDate().compareTo(er2.getExcRateDate());
             }
         };
         
-        return Collections.max(eerList, cmp);
+        return Collections.max(erList, cmp);
     }
 
-    private void searchFxRates(List<FxRateHandling> rates, ConverterUserData cud, ConverterReturnData crt){
+    private void searchFxRates(List<FxRateHandling> fxRates, ConverterUserData cud, ConverterReturnData crt){
         boolean found = false;
-        List<EuroExcRate> euroRates = new ArrayList<EuroExcRate>();
-        for (FxRateHandling rate: rates){
-            EuroExcRate eer = createEuroExcRate(rate);
-            euroRates.add(eer);
-            if(eer.getCurrency().equalsIgnoreCase(cud.getTo())){
+        List<ExcRate> excRates = new ArrayList<ExcRate>();
+        for (FxRateHandling fxRate: fxRates){
+            ExcRate er = createExcRate(fxRate);
+            excRates.add(er);
+            if(er.getCurrencyTo().equalsIgnoreCase(cud.getTo())){
                 found = true;
-                convertCurrency(crt, cud.getAmount(), eer.getExcRate());
+                convertCurrency(crt, cud.getAmount(), er.getExcRate());
             }
         }
 
         if (found)
-            saveEuroExcRates(euroRates);
+            saveExcRates(excRates);
     }
 
-    private void saveEuroExcRates(List<EuroExcRate> eerList){
-        euroExcRateRepository.saveAll(eerList);
-        log.info("Euro santykiai išsaugoti duomenų bazėje");
+    private void saveExcRates(List<ExcRate> erList){
+        excRateRepository.saveAll(erList);
+        log.info("Valiutų santykiai išsaugoti duomenų bazėje");
     }
 
-    private EuroExcRate createEuroExcRate(FxRateHandling rate){
-        EuroExcRate eer = new EuroExcRate();
-        eer.setCurrency(rate.getCcyAmt().get(1).getCcy().name());
-        eer.setExcRate(rate.getCcyAmt().get(1).getAmt());
-        eer.setDateAdded(new Date(System.currentTimeMillis()));
-        eer.setType(rate.getTp().name());
+    private ExcRate createExcRate(FxRateHandling rate){
+        ExcRate er = new ExcRate();
+        er.setCurrencyFrom(rate.getCcyAmt().get(0).getCcy().name());
+        er.setCurrencyTo(rate.getCcyAmt().get(1).getCcy().name());
+        er.setExcRate(rate.getCcyAmt().get(1).getAmt());
+        er.setDateAdded(new Date(System.currentTimeMillis()));
+        er.setType(rate.getTp().name());
 
         Date excRateSqlDate = new Date(rate.getDt().toGregorianCalendar().getTime().getTime());
-        eer.setExcRateDate(excRateSqlDate);
+        er.setExcRateDate(excRateSqlDate);
         
-        return eer;
+        return er;
     }
     
 }

@@ -12,14 +12,17 @@ import lombok.Data;
 
 @Entity
 @Data
-public class EuroExcRate {
+public class ExcRate {
     
     @Id
 	@GeneratedValue
     private Long id;
 
     @Column(nullable = false)
-    private String currency;
+    private String currencyFrom;
+
+    @Column(nullable = false)
+    private String currencyTo;
 
     @Column(nullable = false, precision = 20, scale = 7)
     private BigDecimal excRate;

@@ -38,10 +38,10 @@ export class HomeComponent implements OnInit{
 
     this.currencyService.convertCurrency(formView)
     .subscribe( (returnedData: ConverterResponseModel) => {
-      this.converterView = formView;
       if (returnedData.isError){
         this.errorMsg=returnedData.errMsg;
       }else{
+        this.converterView = formView;
         this.convertedAmount = returnedData.convertedAmount;
       }
     });

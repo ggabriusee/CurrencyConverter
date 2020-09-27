@@ -1,6 +1,7 @@
 # CurrencyConverter
 
-Lokali/dev pasileidimo instrukcija.
+Lokali/dev pasileidimo instrukcija. 
+Ištestuota ir pagaminta Linux Ubuntu aplinkoje.
 
 Paleisti back-end:
 
@@ -11,7 +12,7 @@ Paleisti back-end:
 3. Startuoti serverį ( linux: ./mvnw spring-boot:run ) ( windows: mvnw spring-boot:run ).
 
 Paleidimo Dependencies:
-Maven
+Maven,
 Java 11
 
 
@@ -25,7 +26,7 @@ Paleisti front-end:
 
 
 Paleidimo Dependencies:
-Node Package Manager (npm)
+Node Package Manager (npm),
 Angular CLI
 
 Padarius šiuos veiksmus, aplikacija naršyklėje pasiekiama adresu: http://localhost:4200

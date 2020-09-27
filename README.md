@@ -1,6 +1,7 @@
 # CurrencyConverter
 
 Lokali/dev pasileidimo instrukcija. 
+
 Ištestuota ir pagaminta Linux Ubuntu aplinkoje.
 
 Paleisti back-end:
@@ -30,4 +31,5 @@ Node Package Manager (npm),
 Angular CLI
 
 Padarius šiuos veiksmus, aplikacija naršyklėje pasiekiama adresu: http://localhost:4200
+
 Duomenų bazė naršyklėje pasiekiama adresu: http://localhost:8080/h2-console

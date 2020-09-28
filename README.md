@@ -1,6 +1,15 @@
 # CurrencyConverter
 
-Lokali/dev pasileidimo instrukcija. 
+Deployed at: https://mano-currency-converter.herokuapp.com/
+
+Galima pasiekti duombazę adresu https://mano-currency-converter.herokuapp.com/h2-console prisijungiant prie jdbc:h2:./mydatabase
+
+Deployed produkcinis app yra ta pati versija kaip ir šioje repositorijoje. Galima rasti https://git.heroku.com/mano-currency-converter.git
+
+
+
+
+Toliau Lokali/dev pasileidimo instrukcija. 
 
 Ištestuota ir pagaminta Linux Ubuntu aplinkoje.
 
